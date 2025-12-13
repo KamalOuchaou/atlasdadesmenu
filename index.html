@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Restaurant Atlas Gorge Dades – Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  /* RESET */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #1f2933 0, #050608 55%);
+    color: #111;
+    line-height: 1.5;
+  }
+
+  .page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px 16px;
+  }
+
+  .menu-wrapper {
+    width: 100%;
+    max-width: 540px;
+    background: #f9fafb;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 18px 16px 26px;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(15, 23, 42, 0.7);
+    position: relative;
+    backdrop-filter: blur(16px);
+  }
+
+  /* TOP: language + selected */
+  .top-strip {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(to bottom, #f9fafb 75%, rgba(249, 250, 251, 0.92));
+    padding-bottom: 10px;
+  }
+
+  .lang-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .brand-mini {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #4b5563;
+    font-weight: 600;
+  }
+
+  .lang-switch {
+    display: inline-flex;
+    gap: 4px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    padding: 3px;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+  }
+
+  .lang-btn {
+    border: none;
+    background: transparent;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #6b7280;
+    font-weight: 500;
+    transition: background 0.18s ease-out, color 0.18s ease-out, transform 0.1s ease-out;
+  }
+
+  .lang-btn:hover {
+    background: #f3f4f6;
+  }
+
+  .lang-btn:active {
+    transform: scale(0.97);
+  }
+
+  .lang-btn.active {
+    background: #111827;
+    color: #f9fafb;
+  }
+
+  /* Selected items bar */
+  .selected-bar {
+    padding: 9px 10px 8px;
+    border-radius: 11px;
+    border: 1px dashed #d1d5db;
+    background: #ffffff;
+    box-shadow: inset 0 0 0 1px rgba(243, 244, 246, 0.7);
+  }
+
+  .selected-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #6b7280;
+    margin-bottom: 4px;
+  }
+
+  .selected-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-height: 18px;
+  }
+
+  .selected-pill {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 500;
+  }
+
+  .selected-empty {
+    font-size: 11px;
+    color: #c4c4c4;
+  }
+
+  /* HEADER */
+  .menu-header {
+    text-align: center;
+    margin: 16px 0 14px;
+  }
+
+  .menu-title {
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .menu-subtitle {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  .menu-meta {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  /* SECTION LABELS */
+  .section-label {
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+
+  .divider {
+    border-top: 1px solid #e5e7eb;
+    margin: 6px 0 12px;
+  }
+
+  /* CATEGORY CARD */
+  .category-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    padding: 11px 13px 6px;
+    margin-bottom: 13px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+  }
+
+  .category-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .category-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #374151;
+  }
+
+  .category-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, #111827, #4b5563);
+  }
+
+  /* MENU ITEM + SELECT */
+  .menu-item {
+    padding: 8px 0;
+    border-top: 1px solid #f3f4f6;
+    display: grid;
+    grid-template-columns: auto 26px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .menu-item:first-of-type {
+    border-top: none;
+  }
+
+  .menu-item-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .item-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+  }
+
+  .item-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
+  }
+
+  .item-desc {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  /* SELECT CHECKBOX */
+  .item-select label {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    border: 1px solid #d1d5db;
+    background: radial-gradient(circle at top, #ffffff 0, #f3f4f6 80%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: transparent;
+    cursor: pointer;
+    transition:
+      background 0.16s ease-out,
+      border-color 0.16s ease-out,
+      transform 0.1s ease-out,
+      box-shadow 0.16s ease-out,
+      color 0.16s ease-out;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.12);
+  }
+
+  .item-select label:hover {
+    border-color: #9ca3af;
+  }
+
+  .item-select input {
+    display: none;
+  }
+
+  .item-select input:checked + label {
+    background: radial-gradient(circle at top, #111827 0, #020617 80%);
+    color: #f9fafb;
+    border-color: #020617;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.45);
+    transform: translateY(0.5px);
+  }
+
+  .item-select input:checked + label::before {
+    content: "✓";
+  }
+
+  .menu-footer {
+    margin-top: 18px;
+    padding-top: 11px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  @media (min-width: 768px) {
+    .page {
+      padding: 32px 24px;
+    }
+
+    .menu-wrapper {
+      padding: 22px 22px 30px;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <div class="page">
+    <main class="menu-wrapper">
+      <!-- TOP: language + selected -->
+      <div class="top-strip">
+        <div class="lang-row">
+          <div class="brand-mini" data-i18n="brandMini">Atlas Gorge Dades</div>
+          <div class="lang-switch" aria-label="Language switch">
+            <button class="lang-btn active" data-lang="en">🇬🇧 EN</button>
+            <button class="lang-btn" data-lang="fr">🇫🇷 FR</button>
+            <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
+          </div>
+        </div>
+
+        <div class="selected-bar">
+          <div class="selected-label" data-i18n="selectedLabel">Selected items</div>
+          <div class="selected-items" id="selectedItems">
+            <span class="selected-empty" id="selectedEmpty" data-i18n="selectedEmpty">
+              Tap ✓ to add dishes here
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEADER -->
+      <header class="menu-header">
+        <h1 class="menu-title" data-i18n="restaurantName">Restaurant Atlas Gorge Dades</h1>
+        <p class="menu-subtitle" data-i18n="restaurantSubtitle">Traditional Moroccan Cuisine</p>
+        <p class="menu-meta" data-i18n="restaurantMeta">Dadès Valley · Morocco</p>
+      </header>
+
+      <!-- MENU – FOOD -->
+      <div class="section-label" data-i18n="foodMenuTitle">Menu – Food</div>
+      <div class="divider"></div>
+
+      <!-- STARTERS -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="startersTitle">Starters</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="oasisSalad">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="oasisSaladName">Oasis Salad</h3>
+              <span class="item-price">35 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="oasisSaladDesc">Seasonal vegetables &amp; local olive oil</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-oasisSalad" />
+            <label for="sel-oasisSalad"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="creamyVegetable">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="creamyVegetableName">Creamy Vegetable</h3>
+              <span class="item-price">30 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="creamyVegetableDesc">
+              Creamy vegetable soup with goat cheese
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-creamyVegetable" />
+            <label for="sel-creamyVegetable"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="kasbahSoup">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="kasbahSoupName">Kasbah Soup</h3>
+              <span class="item-price">30 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="kasbahSoupDesc">
+              Harira or light traditional soup with dates
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-kasbahSoup" />
+            <label for="sel-kasbahSoup"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="richeSalad">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="richeSaladName">Riche Salad</h3>
+              <span class="item-price">50 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="richeSaladDesc">
+              Lettuce, tomato, cucumber, cheese, vinaigrette, olive, beetroot, carrot,
+              potato, tuna, peas
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-richeSalad" />
+            <label for="sel-richeSalad"></label>
+          </div>
+        </article>
+      </section>
+
+      <!-- MAIN COURSE -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="mainCourseTitle">Main Course</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="chickenSkewer">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="chickenSkewerName">Chicken Skewer</h3>
+              <span class="item-price">70 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="chickenSkewerDesc">
+              Served with fries or vegetables or rice
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-chickenSkewer" />
+            <label for="sel-chickenSkewer"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="villageCouscous">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="villageCouscousName">Village Couscous</h3>
+              <span class="item-price">70 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="villageCouscousDesc">
+              Couscous with caramelized onions and raisins, Moroccan sweet &amp; savory dish
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-villageCouscous" />
+            <label for="sel-villageCouscous"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="dadesTagine">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="dadesTagineName">Dadès Tagine</h3>
+              <span class="item-price">70 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="dadesTagineDesc">Chicken with local vegetables</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-dadesTagine" />
+            <label for="sel-dadesTagine"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="atlasPeaksTagine">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="atlasPeaksTagineName">Atlas Peaks Tagine</h3>
+              <span class="item-price">70 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="atlasPeaksTagineDesc">Chicken with lemon and olives</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-atlasPeaksTagine" />
+            <label for="sel-atlasPeaksTagine"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="caravanTagine">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="caravanTagineName">Caravan Tagine</h3>
+              <span class="item-price">80 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="caravanTagineDesc">Lamb with prunes and almonds</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-caravanTagine" />
+            <label for="sel-caravanTagine"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="lightVegDish">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="lightVegDishName">Light Vegetarian Dish</h3>
+              <span class="item-price">60 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="lightVegDishDesc"></p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-lightVegDish" />
+            <label for="sel-lightVegDish"></label>
+          </div>
+        </article>
+      </section>
+
+      <!-- DESSERT -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="dessertTitle">Dessert</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="roseHoneyCrepe">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="roseHoneyCrepeName">Rose Honey Crepe</h3>
+              <span class="item-price">25 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="roseHoneyCrepeDesc">Msemen with pure honey</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-roseHoneyCrepe" />
+            <label for="sel-roseHoneyCrepe"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="fruitSalad">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="fruitSaladName">Fruit Salad</h3>
+              <span class="item-price">30 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="fruitSaladDesc">Plate of seasonal fruits</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-fruitSalad" />
+            <label for="sel-fruitSalad"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="homemadeYogurt">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="homemadeYogurtName">Homemade Yogurt</h3>
+              <span class="item-price">24 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="homemadeYogurtDesc">House-made yogurt</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-homemadeYogurt" />
+            <label for="sel-homemadeYogurt"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="moroccanPastries">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="moroccanPastriesName">Moroccan Pastries</h3>
+              <span class="item-price">30 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="moroccanPastriesDesc">
+              Assortment of Moroccan pastries served with mint tea
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-moroccanPastries" />
+            <label for="sel-moroccanPastries"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="orangeSalad">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="orangeSaladName">Orange Salad</h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="orangeSaladDesc">
+              Fresh orange salad with a hint of cinnamon
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-orangeSalad" />
+            <label for="sel-orangeSalad"></label>
+          </div>
+        </article>
+      </section>
+
+      <!-- PRINCIPAL PLAT -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="principalPlatTitle">Principal Plat</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="spaghettiBolognese">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="spaghettiBologneseName">Spaghetti Bolognese</h3>
+              <span class="item-price">80 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="spaghettiBologneseDesc">
+              Bolognese sauce, minced meat, grated cheese
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-spaghettiBolognese" />
+            <label for="sel-spaghettiBolognese"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="vegetarianOmelette">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="vegetarianOmeletteName">Vegetarian Omelette</h3>
+              <span class="item-price">60 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="vegetarianOmeletteDesc">
+              Tomato sauce, carrot, potato, peas, eggs, coriander, olive oil, onion
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-vegetarianOmelette" />
+            <label for="sel-vegetarianOmelette"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="meatOmelette">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="meatOmeletteName">Omelette with Meat</h3>
+              <span class="item-price">70 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="meatOmeletteDesc">
+              Minced meat, tomato sauce, peas, eggs, carrot, sweet pepper, coriander, olive oil
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-meatOmelette" />
+            <label for="sel-meatOmelette"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="ricePilaf">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="ricePilafName">Rice Pilaf Farm Chicken</h3>
+              <span class="item-price">70 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="ricePilafDesc">
+              White rice, farm chicken, cream sauce, seasonal vegetables, rosemary, coriander
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-ricePilaf" />
+            <label for="sel-ricePilaf"></label>
+          </div>
+        </article>
+      </section>
+
+      <!-- DRINKS -->
+      <div class="section-label" data-i18n="drinksMenuTitle" style="margin-top:10px;">Menu – Drinks</div>
+      <div class="divider"></div>
+
+      <!-- MINERAL WATER -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="mineralWaterTitle">Mineral Water</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="water15">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="water15Name">Mineral Water 1.5L</h3>
+              <span class="item-price">8 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-water15" />
+            <label for="sel-water15"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="water05">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="water05Name">Mineral Water 0.5L</h3>
+              <span class="item-price">5 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-water05" />
+            <label for="sel-water05"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="spark1">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="spark1Name">Sparkling Water 1L</h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-spark1" />
+            <label for="sel-spark1"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="spark05">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="spark05Name">Sparkling Water 0.5L</h3>
+              <span class="item-price">10 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-spark05" />
+            <label for="sel-spark05"></label>
+          </div>
+        </article>
+      </section>
+
+      <!-- TEA OR COFFEE -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="teaCoffeeTitle">Tea or Coffee</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="mintTea">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="mintTeaName">Mint Tea</h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="mintTeaDesc">Authentic mint tea from the Dadès Valley</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-mintTea" />
+            <label for="sel-mintTea"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="roseTea">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="roseTeaName">Rose Tea</h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="roseTeaDesc">From Kelaat M’Gouna oasis</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-roseTea" />
+            <label for="sel-roseTea"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="mountainTea">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="mountainTeaName">Mountain Tea</h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="mountainTeaDesc">Atlas herbal infusion</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-mountainTea" />
+            <label for="sel-mountainTea"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="hotLemonTea">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="hotLemonTeaName">Hot Lemon Tea</h3>
+              <span class="item-price">15 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="hotLemonTeaDesc">Infused with fresh lemon slices</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-hotLemonTea" />
+            <label for="sel-hotLemonTea"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="blackCoffee">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="blackCoffeeName">Black Coffee</h3>
+              <span class="item-price">15 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="blackCoffeeDesc">
+              Moroccan coffee, half espresso and half hot milk
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-blackCoffee" />
+            <label for="sel-blackCoffee"></label>
+          </div>
+        </article>
+      </section>
+
+      <!-- SOFT DRINKS -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="softDrinksTitle">Soft Drinks</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="coca">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="cocaName">Coca Zero or Coca Cola</h3>
+              <span class="item-price">15 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-coca" />
+            <label for="sel-coca"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="soda">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="sodaName">Soda Lemon or Soda Apple</h3>
+              <span class="item-price">15 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-soda" />
+            <label for="sel-soda"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="hawai">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="hawaiName">Hawai or Sprite</h3>
+              <span class="item-price">15 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-hawai" />
+            <label for="sel-hawai"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="fanta">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="fantaName">Fanta Lemon or Fanta Orange</h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-fanta" />
+            <label for="sel-fanta"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="schweppes">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="schweppesName">
+                Schweppes Tonic or Schweppes Citron
+              </h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-schweppes" />
+            <label for="sel-schweppes"></label>
+          </div>
+        </article>
+      </section>
+
+      <!-- MIXED JUICE -->
+      <section class="category-card">
+        <div class="category-head">
+          <h2 class="category-title" data-i18n="mixedJuiceTitle">Mixed Juice</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <article class="menu-item" data-key="orangeJuice">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="orangeJuiceName">Fresh Orange Juice</h3>
+              <span class="item-price">20 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="orangeJuiceDesc">
+              Freshly squeezed local oranges
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-orangeJuice" />
+            <label for="sel-orangeJuice"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="oasisJuice">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="oasisJuiceName">Oasis Juice</h3>
+              <span class="item-price">35 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="oasisJuiceDesc">Dates, milk &amp; almonds</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-oasisJuice" />
+            <label for="sel-oasisJuice"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="dadesJuice">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="dadesJuiceName">Dadès Valley Juice</h3>
+              <span class="item-price">30 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="dadesJuiceDesc">Orange, carrot &amp; honey</p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-dadesJuice" />
+            <label for="sel-dadesJuice"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="beetrootJuice">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="beetrootJuiceName">Beetroot Juice</h3>
+              <span class="item-price">25 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="beetrootJuiceDesc">
+              Natural energizing juice rich in vitamins
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-beetrootJuice" />
+            <label for="sel-beetrootJuice"></label>
+          </div>
+        </article>
+
+        <article class="menu-item" data-key="atlasJuice">
+          <div class="menu-item-main">
+            <div class="menu-item-header">
+              <h3 class="item-name" data-i18n="atlasJuiceName">Atlas Juice</h3>
+              <span class="item-price">40 MAD</span>
+            </div>
+            <p class="item-desc" data-i18n="atlasJuiceDesc">
+              Orange, apple, banana, avocado, almond, date, walnut
+            </p>
+          </div>
+          <div class="item-select">
+            <input type="checkbox" id="sel-atlasJuice" />
+            <label for="sel-atlasJuice"></label>
+          </div>
+        </article>
+      </section>
+
+      <footer class="menu-footer">
+        <span data-i18n="footerNote">Prices in Moroccan Dirhams – Service included</span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        brandMini: "Atlas Gorge Dades",
+        selectedLabel: "Selected items",
+        selectedEmpty: "Tap ✓ to add dishes here",
+        restaurantName: "Restaurant Atlas Gorge Dades",
+        restaurantSubtitle: "Traditional Moroccan Cuisine",
+        restaurantMeta: "Dadès Valley · Morocco",
+        foodMenuTitle: "Menu – Food",
+        drinksMenuTitle: "Menu – Drinks",
+        startersTitle: "Starters",
+        mainCourseTitle: "Main Course",
+        dessertTitle: "Dessert",
+        principalPlatTitle: "Principal Plat",
+        mineralWaterTitle: "Mineral Water",
+        teaCoffeeTitle: "Tea or Coffee",
+        softDrinksTitle: "Soft Drinks",
+        mixedJuiceTitle: "Mixed Juice",
+        oasisSaladName: "Oasis Salad",
+        oasisSaladDesc: "Seasonal vegetables & local olive oil",
+        creamyVegetableName: "Creamy Vegetable",
+        creamyVegetableDesc: "Creamy vegetable soup with goat cheese",
+        kasbahSoupName: "Kasbah Soup",
+        kasbahSoupDesc: "Harira or light traditional soup with dates",
+        richeSaladName: "Riche Salad",
+        richeSaladDesc:
+          "Lettuce, tomato, cucumber, cheese, vinaigrette, olive, beetroot, carrot, potato, tuna, peas",
+        chickenSkewerName: "Chicken Skewer",
+        chickenSkewerDesc: "Served with fries or vegetables or rice",
+        villageCouscousName: "Village Couscous",
+        villageCouscousDesc:
+          "Couscous with caramelized onions and raisins, Moroccan sweet & savory dish",
+        dadesTagineName: "Dadès Tagine",
+        dadesTagineDesc: "Chicken with local vegetables",
+        atlasPeaksTagineName: "Atlas Peaks Tagine",
+        atlasPeaksTagineDesc: "Chicken with lemon and olives",
+        caravanTagineName: "Caravan Tagine",
+        caravanTagineDesc: "Lamb with prunes and almonds",
+        lightVegDishName: "Light Vegetarian Dish",
+        lightVegDishDesc: "",
+        roseHoneyCrepeName: "Rose Honey Crepe",
+        roseHoneyCrepeDesc: "Msemen with pure honey",
+        fruitSaladName: "Fruit Salad",
+        fruitSaladDesc: "Plate of seasonal fruits",
+        homemadeYogurtName: "Homemade Yogurt",
+        homemadeYogurtDesc: "House-made yogurt",
+        moroccanPastriesName: "Moroccan Pastries",
+        moroccanPastriesDesc: "Assortment of Moroccan pastries served with mint tea",
+        orangeSaladName: "Orange Salad",
+        orangeSaladDesc: "Fresh orange salad with a hint of cinnamon",
+        spaghettiBologneseName: "Spaghetti Bolognese",
+        spaghettiBologneseDesc: "Bolognese sauce, minced meat, grated cheese",
+        vegetarianOmeletteName: "Vegetarian Omelette",
+        vegetarianOmeletteDesc:
+          "Tomato sauce, carrot, potato, peas, eggs, coriander, olive oil, onion",
+        meatOmeletteName: "Omelette with Meat",
+        meatOmeletteDesc:
+          "Minced meat, tomato sauce, peas, eggs, carrot, sweet pepper, coriander, olive oil",
+        ricePilafName: "Rice Pilaf Farm Chicken",
+        ricePilafDesc:
+          "White rice, farm chicken, cream sauce, seasonal vegetables, rosemary, coriander",
+        water15Name: "Mineral Water 1.5L",
+        water05Name: "Mineral Water 0.5L",
+        spark1Name: "Sparkling Water 1L",
+        spark05Name: "Sparkling Water 0.5L",
+        mintTeaName: "Mint Tea",
+        mintTeaDesc: "Authentic mint tea from the Dadès Valley",
+        roseTeaName: "Rose Tea",
+        roseTeaDesc: "From Kelaat M’Gouna oasis",
+        mountainTeaName: "Mountain Tea",
+        mountainTeaDesc: "Atlas herbal infusion",
+        hotLemonTeaName: "Hot Lemon Tea",
+        hotLemonTeaDesc: "Infused with fresh lemon slices",
+        blackCoffeeName: "Black Coffee",
+        blackCoffeeDesc: "Moroccan coffee, half espresso and half hot milk",
+        cocaName: "Coca Zero or Coca Cola",
+        sodaName: "Soda Lemon or Soda Apple",
+        hawaiName: "Hawai or Sprite",
+        fantaName: "Fanta Lemon or Fanta Orange",
+        schweppesName: "Schweppes Tonic or Schweppes Citron",
+        orangeJuiceName: "Fresh Orange Juice",
+        orangeJuiceDesc: "Freshly squeezed local oranges",
+        oasisJuiceName: "Oasis Juice",
+        oasisJuiceDesc: "Dates, milk & almonds",
+        dadesJuiceName: "Dadès Valley Juice",
+        dadesJuiceDesc: "Orange, carrot & honey",
+        beetrootJuiceName: "Beetroot Juice",
+        beetrootJuiceDesc: "Natural energizing juice rich in vitamins",
+        atlasJuiceName: "Atlas Juice",
+        atlasJuiceDesc:
+          "Orange, apple, banana, avocado, almond, date, walnut",
+        footerNote: "Prices in Moroccan Dirhams – Service included"
+      },
+      fr: {
+        brandMini: "Atlas Gorges Dadès",
+        selectedLabel: "Sélection",
+        selectedEmpty: "Touchez ✓ pour ajouter des plats ici",
+        restaurantName: "Restaurant Atlas Gorges Dadès",
+        restaurantSubtitle: "Cuisine marocaine traditionnelle",
+        restaurantMeta: "Vallée du Dadès · Maroc",
+        foodMenuTitle: "Menu – Plats",
+        drinksMenuTitle: "Menu – Boissons",
+        startersTitle: "Entrées",
+        mainCourseTitle: "Plats principaux",
+        dessertTitle: "Desserts",
+        principalPlatTitle: "Plats du chef",
+        mineralWaterTitle: "Eau minérale",
+        teaCoffeeTitle: "Thé ou café",
+        softDrinksTitle: "Boissons gazeuses",
+        mixedJuiceTitle: "Jus mixtes",
+        oasisSaladName: "Salade Oasis",
+        oasisSaladDesc: "Légumes de saison et huile d’olive locale",
+        creamyVegetableName: "Velouté de légumes",
+        creamyVegetableDesc: "Soupe de légumes crémeuse au fromage de chèvre",
+        kasbahSoupName: "Soupe Kasbah",
+        kasbahSoupDesc: "Harira ou soupe traditionnelle légère aux dattes",
+        richeSaladName: "Salade Riche",
+        richeSaladDesc:
+          "Laitue, tomate, concombre, fromage, vinaigrette, olive, betterave, carotte, pomme de terre, thon, petits pois",
+        chickenSkewerName: "Brochette de poulet",
+        chickenSkewerDesc: "Servie avec frites ou légumes ou riz",
+        villageCouscousName: "Couscous du village",
+        villageCouscousDesc:
+          "Couscous aux oignons caramélisés et raisins secs, plat marocain sucré‑salé",
+        dadesTagineName: "Tajine Dadès",
+        dadesTagineDesc: "Poulet aux légumes locaux",
+        atlasPeaksTagineName: "Tajine Sommets de l’Atlas",
+        atlasPeaksTagineDesc: "Poulet au citron et aux olives",
+        caravanTagineName: "Tajine Caravane",
+        caravanTagineDesc: "Agneau aux pruneaux et amandes",
+        lightVegDishName: "Plat végétarien léger",
+        lightVegDishDesc: "",
+        roseHoneyCrepeName: "Crêpe au miel de rose",
+        roseHoneyCrepeDesc: "Msemen au miel pur",
+        fruitSaladName: "Salade de fruits",
+        fruitSaladDesc: "Assortiment de fruits de saison",
+        homemadeYogurtName: "Yaourt maison",
+        homemadeYogurtDesc: "Yaourt préparé sur place",
+        moroccanPastriesName: "Pâtisseries marocaines",
+        moroccanPastriesDesc:
+          "Assortiment de pâtisseries marocaines servi avec thé à la menthe",
+        orangeSaladName: "Salade d’oranges",
+        orangeSaladDesc:
+          "Salade d’oranges fraîches parfumée à la cannelle",
+        spaghettiBologneseName: "Spaghetti bolognaise",
+        spaghettiBologneseDesc: "Sauce bolognaise, viande hachée, fromage râpé",
+        vegetarianOmeletteName: "Omelette végétarienne",
+        vegetarianOmeletteDesc:
+          "Sauce tomate, carotte, pomme de terre, petits pois, œufs, coriandre, huile d’olive, oignon",
+        meatOmeletteName: "Omelette à la viande",
+        meatOmeletteDesc:
+          "Viande hachée, sauce tomate, petits pois, œufs, carotte, poivron doux, coriandre, huile d’olive",
+        ricePilafName: "Riz pilaf poulet fermier",
+        ricePilafDesc:
+          "Riz blanc, poulet fermier, sauce crémeuse, légumes de saison, romarin, coriandre",
+        water15Name: "Eau minérale 1,5 L",
+        water05Name: "Eau minérale 0,5 L",
+        spark1Name: "Eau gazeuse 1 L",
+        spark05Name: "Eau gazeuse 0,5 L",
+        mintTeaName: "Thé à la menthe",
+        mintTeaDesc:
+          "Véritable thé à la menthe de la vallée du Dadès",
+        roseTeaName: "Thé à la rose",
+        roseTeaDesc: "De l’oasis de Kelaat M’Gouna",
+        mountainTeaName: "Thé de montagne",
+        mountainTeaDesc: "Infusion d’herbes de l’Atlas",
+        hotLemonTeaName: "Thé citron chaud",
+        hotLemonTeaDesc:
+          "Infusé avec des rondelles de citron frais",
+        blackCoffeeName: "Café noir",
+        blackCoffeeDesc:
+          "Café marocain, moitié expresso moitié lait chaud",
+        cocaName: "Coca Zero ou Coca Cola",
+        sodaName: "Soda citron ou pomme",
+        hawaiName: "Hawai ou Sprite",
+        fantaName: "Fanta citron ou orange",
+        schweppesName: "Schweppes Tonic ou Citron",
+        orangeJuiceName: "Jus d’orange frais",
+        orangeJuiceDesc:
+          "Oranges locales fraîchement pressées",
+        oasisJuiceName: "Jus Oasis",
+        oasisJuiceDesc: "Dattes, lait et amandes",
+        dadesJuiceName: "Jus vallée du Dadès",
+        dadesJuiceDesc: "Orange, carotte et miel",
+        beetrootJuiceName: "Jus de betterave",
+        beetrootJuiceDesc:
+          "Jus énergisant naturel riche en vitamines",
+        atlasJuiceName: "Jus Atlas",
+        atlasJuiceDesc:
+          "Orange, pomme, banane, avocat, amande, datte, noix",
+        footerNote: "Prix en dirhams marocains – Service inclus"
+      },
+      es: {
+        brandMini: "Atlas Gargantas del Dadès",
+        selectedLabel: "Elementos elegidos",
+        selectedEmpty: "Toque ✓ para añadir platos aquí",
+        restaurantName: "Restaurante Atlas Gargantas del Dadès",
+        restaurantSubtitle: "Cocina marroquí tradicional",
+        restaurantMeta: "Valle del Dadès · Marruecos",
+        foodMenuTitle: "Menú – Comida",
+        drinksMenuTitle: "Menú – Bebidas",
+        startersTitle: "Entrantes",
+        mainCourseTitle: "Platos principales",
+        dessertTitle: "Postres",
+        principalPlatTitle: "Platos especiales",
+        mineralWaterTitle: "Agua mineral",
+        teaCoffeeTitle: "Té o café",
+        softDrinksTitle: "Refrescos",
+        mixedJuiceTitle: "Zumos mixtos",
+        oasisSaladName: "Ensalada Oasis",
+        oasisSaladDesc:
+          "Verduras de temporada y aceite de oliva local",
+        creamyVegetableName: "Crema de verduras",
+        creamyVegetableDesc:
+          "Sopa cremosa de verduras con queso de cabra",
+        kasbahSoupName: "Sopa Kasbah",
+        kasbahSoupDesc:
+          "Harira o sopa tradicional ligera con dátiles",
+        richeSaladName: "Ensalada Rica",
+        richeSaladDesc:
+          "Lechuga, tomate, pepino, queso, vinagreta, aceituna, remolacha, zanahoria, patata, atún, guisantes",
+        chickenSkewerName: "Brocheta de pollo",
+        chickenSkewerDesc:
+          "Servida con patatas fritas o verduras o arroz",
+        villageCouscousName: "Cuscús del pueblo",
+        villageCouscousDesc:
+          "Cuscús con cebollas caramelizadas y pasas, plato marroquí agridulce",
+        dadesTagineName: "Tajín Dadès",
+        dadesTagineDesc: "Pollo con verduras locales",
+        atlasPeaksTagineName: "Tajín Cumbres del Atlas",
+        atlasPeaksTagineDesc: "Pollo con limón y aceitunas",
+        caravanTagineName: "Tajín Caravana",
+        caravanTagineDesc: "Cordero con ciruelas y almendras",
+        lightVegDishName: "Plato vegetariano ligero",
+        lightVegDishDesc: "",
+        roseHoneyCrepeName: "Crepe con miel de rosa",
+        roseHoneyCrepeDesc: "Msemen con miel pura",
+        fruitSaladName: "Ensalada de frutas",
+        fruitSaladDesc: "Plato de frutas de temporada",
+        homemadeYogurtName: "Yogur casero",
+        homemadeYogurtDesc: "Yogur elaborado en casa",
+        moroccanPastriesName: "Pasteles marroquíes",
+        moroccanPastriesDesc:
+          "Surtido de pasteles marroquíes servido con té a la menta",
+        orangeSaladName: "Ensalada de naranja",
+        orangeSaladDesc:
+          "Ensalada de naranja fresca con un toque de canela",
+        spaghettiBologneseName: "Espaguetis boloñesa",
+        spaghettiBologneseDesc:
+          "Salsa boloñesa, carne picada, queso rallado",
+        vegetarianOmeletteName: "Tortilla vegetariana",
+        vegetarianOmeletteDesc:
+          "Salsa de tomate, zanahoria, patata, guisantes, huevos, cilantro, aceite de oliva, cebolla",
+        meatOmeletteName: "Tortilla con carne",
+        meatOmeletteDesc:
+          "Carne picada, salsa de tomate, guisantes, huevos, zanahoria, pimiento dulce, cilantro, aceite de oliva",
+        ricePilafName: "Arroz pilaf con pollo de granja",
+        ricePilafDesc:
+          "Arroz blanco, pollo de granja, salsa cremosa, verduras de temporada, romero, cilantro",
+        water15Name: "Agua mineral 1,5 L",
+        water05Name: "Agua mineral 0,5 L",
+        spark1Name: "Agua con gas 1 L",
+        spark05Name: "Agua con gas 0,5 L",
+        mintTeaName: "Té de menta",
+        mintTeaDesc:
+          "Auténtico té de menta del valle del Dadès",
+        roseTeaName: "Té de rosa",
+        roseTeaDesc: "Del oasis de Kelaat M’Gouna",
+        mountainTeaName: "Té de montaña",
+        mountainTeaDesc: "Infusión de hierbas del Atlas",
+        hotLemonTeaName: "Té caliente de limón",
+        hotLemonTeaDesc:
+          "Infusionado con rodajas de limón fresco",
+        blackCoffeeName: "Café negro",
+        blackCoffeeDesc:
+          "Café marroquí, mitad espresso mitad leche caliente",
+        cocaName: "Coca Zero o Coca Cola",
+        sodaName: "Refresco de limón o manzana",
+        hawaiName: "Hawai o Sprite",
+        fantaName: "Fanta limón u naranja",
+        schweppesName: "Schweppes tónica o limón",
+        orangeJuiceName: "Zumo de naranja natural",
+        orangeJuiceDesc:
+          "Naranjas locales recién exprimidas",
+        oasisJuiceName: "Zumo Oasis",
+        oasisJuiceDesc: "Dátiles, leche y almendras",
+        dadesJuiceName: "Zumo valle del Dadès",
+        dadesJuiceDesc: "Naranja, zanahoria y miel",
+        beetrootJuiceName: "Zumo de remolacha",
+        beetrootJuiceDesc:
+          "Zumo energético natural rico en vitaminas",
+        atlasJuiceName: "Zumo Atlas",
+        atlasJuiceDesc:
+          "Naranja, manzana, plátano, aguacate, almendra, dátil, nuez",
+        footerNote: "Precios en dírhams marroquíes – Servicio incluido"
+      }
+    };
+
+    function setLanguage(lang) {
+      const dict = translations[lang];
+      if (!dict) return;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key] !== undefined) el.textContent = dict[key];
+      });
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+      document.documentElement.lang = lang;
+    }
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+    });
+
+    // Selected items handling
+    const selectedContainer = document.getElementById("selectedItems");
+    const emptyText = document.getElementById("selectedEmpty");
+
+    function updateSelected() {
+      const names = [];
+      document.querySelectorAll(".menu-item input[type='checkbox']").forEach(chk => {
+        if (chk.checked) {
+          const item = chk.closest(".menu-item");
+          const nameEl = item.querySelector(".item-name");
+          names.push(nameEl.textContent.trim());
+        }
+      });
+
+      selectedContainer.querySelectorAll(".selected-pill").forEach(p => p.remove());
+      if (names.length === 0) {
+        emptyText.style.display = "inline";
+      } else {
+        emptyText.style.display = "none";
+        names.forEach(n => {
+          const pill = document.createElement("span");
+          pill.className = "selected-pill";
+          pill.textContent = n;
+          selectedContainer.appendChild(pill);
+        });
+      }
+    }
+
+    document.querySelectorAll(".menu-item input[type='checkbox']").forEach(chk => {
+      chk.addEventListener("change", updateSelected);
+    });
+
+    // Init
+    setLanguage("en");
+    updateSelected();
+  </script>
+</body>
+</html>
